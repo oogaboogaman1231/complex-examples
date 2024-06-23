@@ -1,0 +1,39 @@
+-- Roblox Lua script demonstrating advanced user interface (UI) with tweening animations
+
+-- Define the module
+local AdvancedUI = {}
+
+-- Function to create and animate UI elements
+function AdvancedUI.CreateAnimatedButton(parent, position, size, text)
+    local button = Instance.new("TextButton")
+    button.Parent = parent
+    button.Position = position
+    button.Size = size
+    button.Text = text
+    button.BackgroundColor3 = Color3.fromRGB(30, 136, 229)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 18
+
+    -- Tweening animation for button hover effect
+    button.MouseEnter:Connect(function()
+        button:TweenSize(UDim2.new(1.2, 0, 1.2, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+    end)
+
+    button.MouseLeave:Connect(function()
+        button:TweenSize(UDim2.new(1, 0, 1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.2, true)
+    end)
+
+    return button
+end
+
+-- Example usage:
+local gui = game.Players.LocalPlayer.PlayerGui -- Replace with actual GUI object
+local buttonPosition = UDim2.new(0.5, 0, 0.5, 0) -- Example button position (centered)
+local buttonSize = UDim2.new(0, 200, 0, 50) -- Example button size
+local buttonText = "Click Me!"
+
+AdvancedUI.CreateAnimatedButton(gui, buttonPosition, buttonSize, buttonText)
+
+-- Return the module
+return AdvancedUI
