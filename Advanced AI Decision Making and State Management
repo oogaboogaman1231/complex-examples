@@ -1,0 +1,102 @@
+-- Roblox Lua script demonstrating advanced AI decision making and state management
+
+-- Define the module
+local AIController = {}
+
+-- AI states
+local AIStates = {
+    Idle = "Idle",
+    Patrolling = "Patrolling",
+    Chasing = "Chasing",
+    Attacking = "Attacking"
+}
+
+-- Function to control AI behavior based on states
+function AIController.UpdateAI(aiModel, player)
+    local currentState = AIStates.Idle
+
+    while true do
+        if currentState == AIStates.Idle then
+            -- Example: Transition to patrolling state
+            currentState = AIStates.Patrolling
+        elseif currentState == AIStates.Patrolling then
+            -- Example: Patrolling behavior (move between predefined waypoints)
+            local waypoints = { Vector3.new(10, 0, 10), Vector3.new(-10, 0, 10), Vector3.new(-10, 0, -10) }
+            for _, waypoint in ipairs(waypoints) do
+                AIController.MoveToTarget(aiModel, waypoint)
+                wait(1) -- Example delay between waypoints
+            end
+            -- Example: Transition to chasing state if player is nearby
+            if AIController.IsPlayerNearby(aiModel, player) then
+                currentState = AIStates.Chasing
+            end
+        elseif currentState == AIStates.Chasing then
+            -- Example: Chasing behavior (move towards player)
+            local playerPosition = player.Character and player.Character.PrimaryPart.Position
+            if playerPosition then
+                AIController.MoveToTarget(aiModel, playerPosition)
+            end
+            -- Example: Transition to attacking state if close enough to player
+            if AIController.IsCloseEnough(aiModel, playerPosition, 10) then
+                currentState = AIStates.Attacking
+            end
+        elseif currentState == AIStates.Attacking then
+            -- Example: Attacking behavior (perform attack animation or action)
+            AIController.Attack(aiModel, player)
+            -- Example: Transition back to patrolling state after attacking
+            currentState = AIStates.Patrolling
+        end
+        wait(0.1) -- Example update interval for AI behavior
+    end
+end
+
+-- Function to move AI to a target position
+function AIController.MoveToTarget(aiModel, targetPosition)
+    local pathfindingService = game:GetService("PathfindingService")
+    local agent = pathfindingService:CreatePath()
+    agent:ComputeAsync(aiModel.PrimaryPart.Position, targetPosition)
+    
+    agent.PathStatusChanged:Connect(function(status)
+        if status == Enum.PathStatus.Complete then
+            for _, waypoint in ipairs(agent:GetWaypoints()) do
+                -- Example: Move AI model to each waypoint
+                aiModel:SetPrimaryPartCFrame(waypoint.Position)
+                wait(1) -- Example delay between waypoints
+            end
+        end
+    end)
+    
+    agent:MoveTo(targetPosition)
+end
+
+-- Function to check if player is nearby
+function AIController.IsPlayerNearby(aiModel, player)
+    local maxDistance = 30 -- Example maximum distance for detecting player
+    local playerPosition = player.Character and player.Character.PrimaryPart.Position
+    if playerPosition then
+        local distance = (aiModel.PrimaryPart.Position - playerPosition).magnitude
+        return distance <= maxDistance
+    end
+    return false
+end
+
+-- Function to check if AI is close enough to attack the player
+function AIController.IsCloseEnough(aiModel, targetPosition, attackRange)
+    local distance = (aiModel.PrimaryPart.Position - targetPosition).magnitude
+    return distance <= attackRange
+end
+
+-- Function to perform attack action on the player
+function AIController.Attack(aiModel, player)
+    -- Example: Perform attack animation or action on the player
+    print(aiModel.Name .. " is attacking " .. player.Name)
+end
+
+-- Example usage:
+local aiModel = game.Workspace.AIModel -- Replace with actual AI model in the game
+local player = game.Players.LocalPlayer -- Replace with actual player object in the game
+
+AIController.UpdateAI(aiModel, player)
+
+-- Return the module
+return AIController
