@@ -1,0 +1,22 @@
+-- Roblox Lua script demonstrating a custom chat system with filtering
+
+-- Define the module
+local CustomChat = {}
+
+-- Function to send a message in the custom chat system
+function CustomChat.SendMessage(player, message)
+    -- Example: Filter inappropriate words
+    local filteredMessage = message:gsub("badword", "***")
+    
+    -- Example: Display message in custom chat UI
+    print("[" .. player.Name .. "]: " .. filteredMessage)
+end
+
+-- Example usage:
+local player = game.Players.LocalPlayer -- Replace with actual player object
+local message = "Hello! This is a test message with a badword."
+
+CustomChat.SendMessage(player, message)
+
+-- Return the module
+return CustomChat
