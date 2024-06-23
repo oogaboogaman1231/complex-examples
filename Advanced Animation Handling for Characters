@@ -1,0 +1,22 @@
+-- Roblox Lua script demonstrating advanced animation handling for characters
+
+-- Define the module
+local AnimationHandler = {}
+
+-- Function to play animation on a character
+function AnimationHandler.PlayAnimation(character, animationId)
+    local humanoid = character:WaitForChild("Humanoid")
+    local animation = Instance.new("Animation")
+    animation.AnimationId = "rbxassetid://" .. animationId
+    local loadedAnimation = humanoid:LoadAnimation(animation)
+    loadedAnimation:Play()
+end
+
+-- Example usage:
+local character = game.Players.LocalPlayer.Character -- Replace with character model
+local animationId = 123456789 -- Replace with actual animation ID from Roblox Studio
+
+AnimationHandler.PlayAnimation(character, animationId)
+
+-- Return the module
+return AnimationHandler
