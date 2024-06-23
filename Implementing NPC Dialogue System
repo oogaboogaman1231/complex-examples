@@ -1,0 +1,54 @@
+-- Roblox Lua script demonstrating an NPC dialogue system
+
+-- Define the module
+local NPCDialogue = {}
+
+-- NPC Dialogue Data (example)
+local dialogueData = {
+    {
+        speaker = "NPC1",
+        dialogue = {
+            "Hello there!",
+            "How can I help you today?",
+            "Would you like to trade?"
+        }
+    },
+    {
+        speaker = "NPC2",
+        dialogue = {
+            "Greetings, adventurer!",
+            "I have quests for you.",
+            "Are you up for a challenge?"
+        }
+    }
+}
+
+-- Function to initiate dialogue with an NPC
+function NPCDialogue.InitiateDialogue(npcModel, player)
+    local npcName = npcModel.Name -- Example: Get NPC name from model
+    for _, data in ipairs(dialogueData) do
+        if data.speaker == npcName then
+            NPCDialogue.DisplayDialogue(data.dialogue)
+            -- Example: Handle player responses and NPC reactions
+            -- Example: Trigger quest assignment, trading UI, etc.
+            break
+        end
+    end
+end
+
+-- Function to display dialogue in a GUI
+function NPCDialogue.DisplayDialogue(dialogueLines)
+    -- Example: Display dialogue lines in a GUI for player interaction
+    for _, line in ipairs(dialogueLines) do
+        print(line) -- Example: Output dialogue lines to console
+    end
+end
+
+-- Example usage:
+local npcModel = game.Workspace.NPC1 -- Replace with actual NPC model in the game
+local player = game.Players.LocalPlayer -- Replace with actual player object in the game
+
+NPCDialogue.InitiateDialogue(npcModel, player)
+
+-- Return the module
+return NPCDialogue
