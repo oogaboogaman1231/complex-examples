@@ -1,0 +1,33 @@
+-- Roblox Lua script demonstrating procedural terrain generation using Perlin noise
+
+-- Define the module
+local ProceduralTerrain = {}
+
+-- Function to generate terrain using Perlin noise
+function ProceduralTerrain.GenerateTerrain(size, maxHeight, scale)
+    local terrainModel = Instance.new("Model")
+    terrainModel.Name = "ProceduralTerrain"
+
+    for x = 1, size do
+        for z = 1, size do
+            local height = math.noise(x * scale, z * scale) * maxHeight
+            local part = Instance.new("Part")
+            part.Size = Vector3.new(4, height, 4)
+            part.Position = Vector3.new(x * 4, height / 2, z * 4)
+            part.Anchored = true
+            part.Parent = terrainModel
+        end
+    end
+
+    terrainModel.Parent = game.Workspace
+end
+
+-- Example usage:
+local terrainSize = 50 -- Size of the terrain (50x50 in this case)
+local maxTerrainHeight = 50 -- Maximum height of terrain features
+local noiseScale = 0.1 -- Scale factor for Perlin noise
+
+ProceduralTerrain.GenerateTerrain(terrainSize, maxTerrainHeight, noiseScale)
+
+-- Return the module
+return ProceduralTerrain
